@@ -28,17 +28,21 @@ fun main() {
  * Defines the UI and responds to events
  * The app model should be passwd as an argument
  */
-class MainWindow : JFrame(), ActionListener {
+class MainWindow : JFrame(), ActionListener, KeyListener {
 
     // Fields to hold the UI elements
-    private lateinit var colorLabel: JLabel
+
+    private lateinit var userInput: JTextField
+
     private lateinit var redTextField: JTextField
-    private lateinit var blueTextField: JTextField
-    private lateinit var greenTextField: JTextField
     private lateinit var redUpButton: JButton
     private lateinit var redDownButton: JButton
+
+    private lateinit var greenTextField: JTextField
     private lateinit var greenUpButton: JButton
     private lateinit var greenDownButton: JButton
+
+    private lateinit var blueTextField: JTextField
     private lateinit var blueUpButton: JButton
     private lateinit var blueDownButton: JButton
 
@@ -48,6 +52,7 @@ class MainWindow : JFrame(), ActionListener {
     init {
         configureWindow()               // Configure the window
         addControls()                   // Build the UI
+        textField()
 
         setLocationRelativeTo(null)     // Centre the window
         isVisible = true                // Make it visible
@@ -66,34 +71,40 @@ class MainWindow : JFrame(), ActionListener {
         pack()
     }
 
+    private fun textField(){
+        val defaultFont = Font(Font.SANS_SERIF, Font.PLAIN, 30)
+
+        userInput = JTextField()
+        userInput.bounds = Rectangle(50, 50, 250, 100)
+        userInput.background = Color.white
+        userInput.font = defaultFont
+        userInput.addActionListener(this)
+        userInput.addKeyListener(this)
+        add(userInput)
+    }
     /**
      * Populate the UI with UI controls
+     *
      */
     private fun addControls() {
         val defaultFont = Font(Font.SANS_SERIF, Font.PLAIN, 30)
-
-        colorLabel = JLabel("...")
-        colorLabel.horizontalAlignment = SwingConstants.CENTER
-        colorLabel.bounds = Rectangle(50, 50, 500, 100)
-        colorLabel.font = defaultFont
-        add(colorLabel)
 
         //========================
         // EVERYTHING RED
         //========================
         redTextField = JTextField()
-        redTextField.bounds = Rectangle(25, 200, 100, 100)
+        redTextField.bounds = Rectangle(50, 200, 100, 100)
         redTextField.background = Color.RED
         add(redTextField)
 
         redUpButton = JButton("+")
-        redUpButton.bounds = Rectangle(125,200,50,50)
+        redUpButton.bounds = Rectangle(150,200,50,50)
         redUpButton.font = defaultFont
         redUpButton.addActionListener(this)     // Handle any clicks
         add(redUpButton)
 
         redDownButton = JButton("-")
-        redDownButton.bounds = Rectangle(125,250,50,50)
+        redDownButton.bounds = Rectangle(150,250,50,50)
         redDownButton.font = defaultFont
         redDownButton.addActionListener(this)     // Handle any clicks
         add(redDownButton)
@@ -102,18 +113,18 @@ class MainWindow : JFrame(), ActionListener {
         // EVERYTHING GREEN
         //==========================
         greenTextField = JTextField()
-        greenTextField.bounds = Rectangle(175, 200, 100, 100)
+        greenTextField.bounds = Rectangle(200, 200, 100, 100)
         greenTextField.background = Color.GREEN
         add(greenTextField)
 
         greenUpButton = JButton("+")
-        greenUpButton.bounds = Rectangle(275,200,50,50)
+        greenUpButton.bounds = Rectangle(300,200,50,50)
         greenUpButton.font = defaultFont
         greenUpButton.addActionListener(this)     // Handle any clicks
         add(greenUpButton)
 
         greenDownButton = JButton("-")
-        greenDownButton.bounds = Rectangle(275,250,50,50)
+        greenDownButton.bounds = Rectangle(300,250,50,50)
         greenDownButton.font = defaultFont
         greenDownButton.addActionListener(this)     // Handle any clicks
         add(greenDownButton)
@@ -122,19 +133,19 @@ class MainWindow : JFrame(), ActionListener {
         // EVERYTHING BLUE
         //===============================
         blueTextField = JTextField()
-        blueTextField.bounds = Rectangle(325, 200, 100, 100)
+        blueTextField.bounds = Rectangle(350, 200, 100, 100)
         blueTextField.font = defaultFont
         blueTextField.background = Color.BLUE
         add(blueTextField)
 
         blueUpButton = JButton("+")
-        blueUpButton.bounds = Rectangle(425,200,50,50)
+        blueUpButton.bounds = Rectangle(450,200,50,50)
         blueUpButton.font = defaultFont
         blueUpButton.addActionListener(this)     // Handle any clicks
         add(blueUpButton)
 
         blueDownButton = JButton("-")
-        blueDownButton.bounds = Rectangle(425,250,50,50)
+        blueDownButton.bounds = Rectangle(450,250,50,50)
         blueDownButton.font = defaultFont
         blueDownButton.addActionListener(this)     // Handle any clicks
         add(blueDownButton)
@@ -145,12 +156,33 @@ class MainWindow : JFrame(), ActionListener {
      * Handle any UI events (e.g. button clicks)
      */
     override fun actionPerformed(e: ActionEvent?) {
+        var userInput: Int = userInput.text.toInt()
         when (e?.source) {
             redUpButton -> {
-                colorLabel.text = "You clicked the button!"
+                userInput++
             }
         }
     }
+    override fun keyTyped(e: KeyEvent?) {
+        println("Key TYPED: ${e?.keyChar}")
+    }
+
+    override fun keyPressed(e: KeyEvent?) {
+        println("Key PRESSED: ${e?.keyCode}")
+
+        if (e?.keyCode in KeyEvent.VK_0..KeyEvent.VK_9) {
+            println("Number Key!")
+        }
+        else {
+            e?.consume()
+        }
+    }
+    override fun keyReleased(e: KeyEvent?) {
+        println("Key RELEASED: ${e?.keyCode}")
+    }
 
 }
+
+
+
 
